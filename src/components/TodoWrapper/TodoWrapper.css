@@ -1,0 +1,27 @@
+.TodoWrapper__list {
+  list-style-type: none;
+}
+
+.TodoWrapper__list input {
+  width: 20px;
+  height: 20px;
+  margin-right: 20px;
+}
+
+.TodoWrapper__item:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.TodoWrapper__item label{
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 25px 20px;
+  display: flex;
+  align-items: center;
+}
+
+
+
+p {
+  margin-bottom: 10px;
+}
