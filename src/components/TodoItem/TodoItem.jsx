@@ -1,47 +1,38 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { ReactComponent as DeleteSvg } from "../Icons/delete.svg";
 import Input from '../Input/Input'
-import { useDispatch, useSelector } from "react-redux";
-import { ADD_TODO } from '../../redux/types';
-import { addTodo, replaceTodo } from '../../redux/actions';
+import {useDispatch, useSelector} from "react-redux";
+import {deleteTodo, toggleTodo} from '../../redux/actions';
+import Button from '../Button/Button';
+import styles from './TodoItem.css';
 
 export default function TodoItem(props) {
-  const [isDone, setIsDone] = useState(props.isDone)
   const dispatch = useDispatch()
-  const store = useSelector(state => state.todo.todoList)
+  const todoItem = useSelector(state => state.todo.todoList.find(item => item.id === props.id))
+  const inputChangeHandler = () => dispatch(toggleTodo(props.id))
 
-  const [updatedTodo, setUpdatedTodo] = useState()
-
-  const inputChangeHandler = (event) => {
-    setIsDone(!isDone)
-    
-    setUpdatedTodo(store.map(item => {
-      if (item.id === event.target.id) {
-        return {
-          ...item,
-          isDone: !isDone
-        }
-      } else {
-        return item
-      }
-    }))  
-
-    dispatch(replaceTodo(updatedTodo))
-  }
-
-
+  const buttonClickHandler = (event) => dispatch(deleteTodo(event.target.id))
+ 
   return (
     <>
-    <p>{JSON.stringify(updatedTodo)}</p>
-    <label className='TodoItem'>
-      <Input 
-        type='checkbox'
-        id={props.id}
-        checked={isDone}
-        inputChangeHandler={inputChangeHandler}        
-      />
-      {props.title} ----  
-      {JSON.stringify(isDone)}
-    </label>
+      {todoItem && (
+        <label className='TodoItem'>
+          <Input
+            type='checkbox'
+            id={props.id}
+            checked={todoItem.isDone}
+            inputChangeHandler={inputChangeHandler}
+          />
+          <p>{todoItem.title}</p>
+          <Button
+            id={props.id}
+            type='reset'
+            name='delete'
+            content={<DeleteSvg width='15' height='15' />}
+            buttonClickHandler={buttonClickHandler}
+          />
+        </label>
+      )}
     </>
   )
 }

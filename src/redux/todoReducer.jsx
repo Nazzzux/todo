@@ -1,4 +1,4 @@
-import { ADD_TODO, REPLACE_TODO } from './types';
+import {ADD_TODO, DELETE_TODO, TOGGLE_TODO} from './types';
 
 const initialState = {
   todoList: [],
@@ -9,12 +9,22 @@ export const todoReducer = (state = initialState, action) => {
     case ADD_TODO:
       return {
         ...state,
-        todoList: state.todoList.concat(action.payload)
+        todoList: [...state.todoList, action.payload]
       }
-      case REPLACE_TODO:
+    case TOGGLE_TODO:
+      return {
+        ...state,
+        todoList: state.todoList.map(item => {
+          if (item.id === action.payload) {
+            return { ...item, isDone: !item.isDone }
+          }
+          return item
+        })
+      }
+      case DELETE_TODO :
         return {
           ...state,
-          todoList: action.payload
+          todoList: state.todoList.filter(item => item.id !== action.payload) 
         }
     default:
       return state
